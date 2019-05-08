@@ -7,6 +7,7 @@
 int barbaroGlobal;
 int crawmeraxLifeVariavelGlobal;
 char jogadorOne[TAM];
+int barbaroLifeVariavelGlobal;
 
 
 /*
@@ -60,7 +61,7 @@ struct mago{
 };
 */
 
-int criandoStructCrawmerax(){
+int criandoStructCrawmerax(int jogada, int crawmeraxLife){
 	// Aqui eu estou criando minha struct com o nome crawmerax
 	struct crawmerax{	
 		int attackBody;
@@ -72,31 +73,55 @@ int criandoStructCrawmerax(){
 	// Aqui eu estou criando um variavel (Crawmerax) do tipo (crawmerax)
 	struct crawmerax Crawmerax;
 
-	// Atribuindo valores as variaveis da minha struct crawmerax 
-	Crawmerax.attackBody = 25;
-	Crawmerax.attackDistance = 13;
-	Crawmerax.cure = 13;
-	crawmeraxLifeVariavelGlobal = Crawmerax.life = 250;
+	// Atribuindo valores as variaveis da minha struct crawmerax com a jogado 
+	if(jogada == 4){
+		Crawmerax.attackBody = 25;
+		return 1;
+	}else if(jogada == 2){
+		Crawmerax.attackDistance = 13;
+		return 2;
+	}else if(jogada == 3){
+		Crawmerax.cure = 13;
+		return 3;
+	}else if(jogada == 1){
+		crawmeraxLifeVariavelGlobal = Crawmerax.life = crawmeraxLife;
+		printf(">>>>>>>>>>>>>>%d", crawmeraxLifeVariavelGlobal);
+		return crawmeraxLifeVariavelGlobal;
+	}else{
+		return 0;
+	}
 
-	return crawmeraxLifeVariavelGlobal;
+	return barbaroLifeVariavelGlobal;
 }
-int criandoStructBarbaro(){
+int criandoStructBarbaro(int jogada, int barbaroLife){
 	struct barbaro{
 		int attackBody;
 		int attackDistance;
 		int cure;
 		int life;
-
 	};
 
 	struct barbaro Barbaro;
 
-	barbaroGlobal = Barbaro.attackBody = 21;
-	Barbaro.attackDistance = 15;
-	Barbaro.cure = 17;
-	Barbaro.life = 220;
-
-	return barbaroGlobal;
+	if(jogada == 4){
+		barbaroLifeVariavelGlobal = Barbaro.attackBody=25;
+		return barbaroLifeVariavelGlobal;
+	
+	}else if(jogada == 2){
+		barbaroLifeVariavelGlobal = Barbaro.attackDistance = 13;
+		return barbaroLifeVariavelGlobal;
+	
+	}else if(jogada == 3){
+		barbaroLifeVariavelGlobal = Barbaro.cure = 13;
+		return barbaroLifeVariavelGlobal;
+	
+	}else if(jogada == 1){
+		barbaroLifeVariavelGlobal = Barbaro.life = barbaroLife;
+		return barbaroLifeVariavelGlobal;
+	
+	}else{
+		return 0;
+	}
 }
 
 /* A batalha rola nessa função gameRun()
@@ -107,6 +132,7 @@ int criandoStructBarbaro(){
 char *classCharacter(int classe){
 	char *characOne;
 	characOne = malloc(TAM*sizeof(char));
+
 	switch(classe){
 		case 01:
 			strcpy(characOne, "BARBARO");
@@ -135,48 +161,64 @@ int gameRun(){
 	int atCure;
 	int atLife;
 	int ab = 0;
+	int bLife;
+
 	int rodada =1;
 	char classe[TAM];
 	// Estou chamando as funções para poder acessar os valores delas
-	criandoStructBarbaro();
-	criandoStructCrawmerax();
-
+	srand(time(NULL));
 	while(1){
-		cabecalhoGameRun();
-		//struct barbaro bar;
-		
-		printf("Qual sua jogada?\n");
-		scanf("%d", &opcao);
+			//struct barbaro bar;
+			if (rodada%2==1 || rodada%2==0){
+				cabecalhoGameRun();
+				printf("Qual sua jogada?\n");
+				scanf("%d", &opcao);
+				switch(opcao){
+					case 1:
+						criandoStructBarbaro(4, 220);
+						criandoStructCrawmerax(1, 250);
+						if(rodada == 1){
+							singlePlayer(jogadorOne,220, 250,"BARBARO");
+						}else{
+							singlePlayer(jogadorOne,bLife, atLife,"BARBARO");
+						}
+						printf("\nataque base: %d\n", barbaroLifeVariavelGlobal);
+						atBory = 1 + rand() % 5;
+						printf("\nataque adicional: %d\n", atBory);
+						atBory += barbaroLifeVariavelGlobal;
 
-		switch(opcao){
-			case 1:
-				srand(time(NULL));
-				if(rodada == 1){
-					printf(">>>>>>>%s", jogadorOne);
-					singlePlayer(jogadorOne,200, 250,"BARBARO");
-				}else{
-					singlePlayer(jogadorOne,200, atLife, "BARBARO");
+						printf("\nataque Final: %d\n", atBory);
+
+						// Tirando vida do crawmerax de acordo com o ataque atBory
+						ab += atBory;
+						printf(">>>>>>%d\n",ab);
+						atLife = crawmeraxLifeVariavelGlobal - ab;
+						bLife = criandoStructBarbaro(1,220);
+						printf(">>>>>>%d\n",bLife);
+						rodada++;
+					/* A cada vez que while da um loop o life do Crawmerx volta a ser 250
+				 	* temos que ajeitar isso!
+				 	*	
+					*/
+						break;
+					//case 2:
+					//	singlePlayer(jogadorOne,bLife, atLife,"BARBARO");
+					//	printf("\nAtaque a distancia Base: %d\n", barbaroGlobal);
+					/*	atBory = 1 + rand() % 5;
+						printf("\nataque adicional: %d\n", atBory);
+						atBory += barbaroGlobal;
+
+						printf("\nataque Final: %d\n", atBory);
+
+						// Tirando vida do crawmerax de acordo com o ataque atBory
+						ab += atBory;
+						atLife = crawmeraxLifeVariavelGlobal - ab;
+						bLife = barbaroLifeVariavelGlobal;
+						rodada++;
+*/
 				}
-				printf("\nataque base: %d\n", barbaroGlobal);
-				atBory = 1 + rand() % 6;
-				printf("\nataque rand: %d\n", atBory);
-				atBory += barbaroGlobal;
 
-				printf("\nataque Final: %d\n", atBory);
-
-				// Tirando vida do crawmerax de acordo com o ataque atBory
-				ab += atBory;
-				atLife = crawmeraxLifeVariavelGlobal - ab;
-				rodada++;
-
-
-				/* A cada vez que while da um loop o life do Crawmerx volta a ser 250
-				 * temos que ajeitar isso!
-				 *	
-				*/
-
-		}
-
+			}
 	}
 }
 
@@ -200,6 +242,7 @@ int main(void){
 			scanf("%d", &cl);
 			strcpy(classONE, classCharacter(cl));
 			printf("%s : Boa escolha! %s \n", classONE, jogadorOne);
+			
 			gameRun(); 
 			
 			break;
