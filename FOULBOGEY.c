@@ -59,7 +59,7 @@ struct mago{
 };
 */
 
-int criandoStructCrawmerax(){
+int criandoStructCrawmerax(int jogada, int crawmeraxLife){
 	// Aqui eu estou criando minha struct com o nome crawmerax
 	struct crawmerax{	
 		int attackBody;
@@ -71,11 +71,23 @@ int criandoStructCrawmerax(){
 	// Aqui eu estou criando um variavel (Crawmerax) do tipo (crawmerax)
 	struct crawmerax Crawmerax;
 
-	// Atribuindo valores as variaveis da minha struct crawmerax 
-	Crawmerax.attackBody = 25;
-	Crawmerax.attackDistance = 13;
-	Crawmerax.cure = 13;
-	crawmeraxLifeVariavelGlobal = Crawmerax.life = 250;
+	// Atribuindo valores as variaveis da minha struct crawmerax com a jogado 
+	if(jogada == 4){
+		Crawmerax.attackBody = 25;
+		return 1;
+	}else if(jogada == 2){
+		Crawmerax.attackDistance = 13;
+		return 2;
+	}else if(jogada == 3){
+		Crawmerax.cure = 13;
+		return 3;
+	}else if(jogada == 1){
+		crawmeraxLifeVariavelGlobal = Crawmerax.life = crawmeraxLife;
+		printf(">>>>>>>>>>>>>>%d", crawmeraxLifeVariavelGlobal);
+		return crawmeraxLifeVariavelGlobal;
+	}else{
+		return 0;
+	}
 
 	return crawmeraxLifeVariavelGlobal;
 }
@@ -108,35 +120,48 @@ int gameRun(){
 	int atDistance;
 	int atCure;
 	int atLife;
+	int rodadas = 0;
 
 	// Estou chamando as funções para poder acessar os valores delas
 	criandoStructBarbaro();
-	criandoStructCrawmerax();
 
 	printf("Executou");
 	while(1){
 		cabecalhoGameRun();
+
 		printf("Qual sua jogada?\n");
 		scanf("%d", &opcao);
 
 		switch(opcao){
 			case 1:
+				rodadas++;
 				srand(time(NULL));
-				printf("\nataque antes: %d\n", barbaroGlobal);
+				//printf("\nataque antes: %d\n", barbaroGlobal);
 				atBory = 1 + rand() % 6;
-				printf("\nataque rand: %d\n", atBory);
+				//printf("\nataque rand: %d\n", atBory);
 				atBory += barbaroGlobal;
 
 				
 				printf("\nataque Final: %d\n", atBory);
 
-				// Tirando vida do crawmerax de acordo com o ataque atBory
-				atLife = crawmeraxLifeVariavelGlobal - atBory;
-				printf("\nCrawmerax(vida) - %d\n", atLife); 
-				/* A cada vez que while da um loop o life do Crawmerx volta a ser 250
-				 * temos que ajeitar isso!
-				 *	
-				*/
+				if(rodadas == 1){
+					criandoStructCrawmerax(1, 250); // (1, 250) 1 é o ataque e 250 é a vida
+					printf("Entrou na rodada %d", rodadas);
+				}else{
+					printf("Entrou na rodada %d", rodadas);
+					// Tirando vida do crawmerax de acordo com o ataque atBory
+					printf(">>>>>>>>>>>>%d", crawmeraxLifeVariavelGlobal);
+					atLife = crawmeraxLifeVariavelGlobal - atBory;
+					criandoStructCrawmerax(1, atLife);
+
+					printf("\nCrawmerax(vida) - %d\n", atLife); 
+					/* A cada vez que while da um loop o life do Crawmerx volta a ser 250
+					 * temos que ajeitar isso!
+					 *	
+					*/
+				}
+				
+				
 
 		}
 
@@ -187,7 +212,8 @@ int main(void){
 
 			strcpy(cONE, classCharacter(cl));
 			printf("%s : Boa escolha!\n", cONE);
-			gameRun(); 
+
+			gameRun();// Executando o jogo em single player 
 			break;
 		/*
 		case 02: 
