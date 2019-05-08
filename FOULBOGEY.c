@@ -8,7 +8,11 @@ int barbaroGlobal;
 int crawmeraxLifeVariavelGlobal;
 char jogadorOne[TAM];
 int barbaroLifeVariavelGlobal;
+int dano=0;
 
+void clear(){
+	system("cls");
+}
 
 /*
 int multiPlayers(char playerOne[TAM], char playerTwo[TAM], int lifeOne, int lifeTwo, int lifeCraw, char characterOne[TAM], char characterTwo[TAM]){
@@ -21,11 +25,11 @@ int multiPlayers(char playerOne[TAM], char playerTwo[TAM], int lifeOne, int life
 	printf("=========================================================\n");
 }
 */
-int singlePlayer(char playerOne[TAM], int lifeOne, int lifeCraw, char characterOne[TAM]){
+int singlePlayer(char playerOne[TAM], int lifeOne, int lifeCraw, char characterOne[TAM], int rodada){
 	printf("\n=========================================================\n");
 	printf("Player01: %s   Vida: %d classe: %s \n", playerOne, lifeOne, characterOne);
-	printf("INIMIGO: Crawmerax       Vida: %d \n", lifeCraw);
-	printf("=========================================================\n");
+	printf("INIMIGO: Crawmerax       Vida: %d  Rodada: %d\n", lifeCraw, rodada);
+	printf("===========================================================\n");
 }
 //int barbaro(int life, int cure, int offense, int meleeatack);
 void cabecClass(void){
@@ -36,7 +40,7 @@ void cabecClass(void){
 }
 
 void cabecalhoGameRun(){
-	printf("==================	CAMPO DE BATALHA INICIADO ====================\n");
+	printf("==================CAMPO DE BATALHA INICIADO====================\n");
 	printf("01 - Ataque Corpo a Corpo \n");
 	printf("02 - Ataque a Distancia");
 	printf("\n03 - Cura ");
@@ -61,6 +65,7 @@ struct mago{
 };
 */
 
+
 int criandoStructCrawmerax(int jogada, int crawmeraxLife){
 	// Aqui eu estou criando minha struct com o nome crawmerax
 	struct crawmerax{	
@@ -75,17 +80,20 @@ int criandoStructCrawmerax(int jogada, int crawmeraxLife){
 
 	// Atribuindo valores as variaveis da minha struct crawmerax com a jogado 
 	if(jogada == 4){
-		Crawmerax.attackBody = 25;
-		return 1;
+		crawmeraxLifeVariavelGlobal = Crawmerax.attackBody = 25;
+		return crawmeraxLifeVariavelGlobal;
+
 	}else if(jogada == 2){
-		Crawmerax.attackDistance = 13;
-		return 2;
+		crawmeraxLifeVariavelGlobal = Crawmerax.attackDistance = 13;
+		return crawmeraxLifeVariavelGlobal;
+
 	}else if(jogada == 3){
-		Crawmerax.cure = 13;
-		return 3;
+		crawmeraxLifeVariavelGlobal = Crawmerax.cure = 13;
+		return crawmeraxLifeVariavelGlobal;
+
 	}else if(jogada == 1){
 		crawmeraxLifeVariavelGlobal = Crawmerax.life = crawmeraxLife;
-		printf(">>>>>>>>>>>>>>%d", crawmeraxLifeVariavelGlobal);
+		printf("Crawmerax(Vida): %d\n", crawmeraxLifeVariavelGlobal);
 		return crawmeraxLifeVariavelGlobal;
 	}else{
 		return 0;
@@ -128,7 +136,6 @@ int criandoStructBarbaro(int jogada, int barbaroLife){
 * Aqui vai ser a funçao onde o usuario escolheram os ataque 
 * e aqui tambem a gente pode calcular os danos igual eu fiz ali :D
 */
-
 char *classCharacter(int classe){
 	char *characOne;
 	characOne = malloc(TAM*sizeof(char));
@@ -168,39 +175,38 @@ int gameRun(){
 	// Estou chamando as funções para poder acessar os valores delas
 	srand(time(NULL));
 	while(1){
-			//struct barbaro bar;
-			if (rodada%2==1 || rodada%2==0){
-				cabecalhoGameRun();
-				printf("Qual sua jogada?\n");
-				scanf("%d", &opcao);
-				switch(opcao){
-					case 1:
-						criandoStructBarbaro(4, 220);
-						criandoStructCrawmerax(1, 250);
-						if(rodada == 1){
-							singlePlayer(jogadorOne,220, 250,"BARBARO");
-						}else{
-							singlePlayer(jogadorOne,bLife, atLife,"BARBARO");
-						}
-						printf("\nataque base: %d\n", barbaroLifeVariavelGlobal);
-						atBory = 1 + rand() % 5;
-						printf("\nataque adicional: %d\n", atBory);
-						atBory += barbaroLifeVariavelGlobal;
+		if (rodada%2==1){
+			cabecalhoGameRun();
+			printf("Qual sua jogada?\n");
+			scanf("%d", &opcao);
+			switch(opcao){
+				case 1:
+				criandoStructBarbaro(4, 220);
+				criandoStructCrawmerax(1, 250);
+				if(rodada == 1){
+					clear();
+					singlePlayer(jogadorOne,220, 250,"BARBARO", rodada);
+				}else{
+					clear();
+					singlePlayer(jogadorOne,bLife-dano, atLife,"BARBARO", rodada);
+				}
+				printf("\nataque base: %d\n", barbaroLifeVariavelGlobal);
+				atBory = 1 + rand() % 5;
+				printf("\nataque adicional: %d\n", atBory);
+				atBory += barbaroLifeVariavelGlobal;
 
-						printf("\nataque Final: %d\n", atBory);
+				printf("\nataque Final: %d\n", atBory);
 
 						// Tirando vida do crawmerax de acordo com o ataque atBory
-						ab += atBory;
-						printf(">>>>>>%d\n",ab);
-						atLife = crawmeraxLifeVariavelGlobal - ab;
-						bLife = criandoStructBarbaro(1,220);
-						printf(">>>>>>%d\n",bLife);
-						rodada++;
+				ab += atBory;
+				atLife = crawmeraxLifeVariavelGlobal - ab;
+				bLife = criandoStructBarbaro(1,220);
+				rodada++;
 					/* A cada vez que while da um loop o life do Crawmerx volta a ser 250
 				 	* temos que ajeitar isso!
 				 	*	
 					*/
-						break;
+				break;
 					//case 2:
 					//	singlePlayer(jogadorOne,bLife, atLife,"BARBARO");
 					//	printf("\nAtaque a distancia Base: %d\n", barbaroGlobal);
@@ -216,9 +222,24 @@ int gameRun(){
 						bLife = barbaroLifeVariavelGlobal;
 						rodada++;
 */
-				}
-
 			}
+		}else{
+			int aux;
+			singlePlayer(jogadorOne,bLife-aux, atLife,"BARBARO", rodada);
+			printf("...Espere Crawmerax fazer sua jogada...\n");
+			opcao = 1+rand()%1;
+			switch(opcao){
+				case 1:
+				criandoStructCrawmerax(4, atLife);
+				printf(">>>>>>> Crawmerax(life): %d\n", atLife);
+				atBory = 1 + rand() % 5;
+				atBory += crawmeraxLifeVariavelGlobal;
+				printf("Dano causado: %d\n", crawmeraxLifeVariavelGlobal);
+				aux += atBory;
+				dano =aux;
+			}
+			rodada++;
+		}
 	}
 }
 
@@ -227,6 +248,7 @@ int main(void){
 	int op, cl;
 	char playerOne[TAM], playerTwo[TAM];
 	char classONE[TAM];
+	clear();
 	printf("=========================================================\n");
 	printf("        BEM VINDO AO LOP - League of Pobres              \n");
 	printf("================SELECIONE UMA DAS OPCOES=================\n");
@@ -242,7 +264,6 @@ int main(void){
 			scanf("%d", &cl);
 			strcpy(classONE, classCharacter(cl));
 			printf("%s : Boa escolha! %s \n", classONE, jogadorOne);
-			
 			gameRun(); 
 			
 			break;
