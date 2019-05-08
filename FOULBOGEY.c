@@ -73,18 +73,22 @@ int criandoStructCrawmerax(int jogada, int crawmeraxLife){
 
 	// Atribuindo valores as variaveis da minha struct crawmerax com a jogado 
 	if(jogada == 4){
-		Crawmerax.attackBody = 25;
-		return 1;
+		crawmeraxLifeVariavelGlobal = Crawmerax.attackBody = 25;
+		return crawmeraxLifeVariavelGlobal;
+
 	}else if(jogada == 2){
-		Crawmerax.attackDistance = 13;
-		return 2;
+		crawmeraxLifeVariavelGlobal = Crawmerax.attackDistance = 13;
+		return crawmeraxLifeVariavelGlobal;
+
 	}else if(jogada == 3){
-		Crawmerax.cure = 13;
-		return 3;
+		crawmeraxLifeVariavelGlobal = Crawmerax.cure = 13;
+		return crawmeraxLifeVariavelGlobal;
+
 	}else if(jogada == 1){
 		crawmeraxLifeVariavelGlobal = Crawmerax.life = crawmeraxLife;
 		printf("Crawmerax(Vida): %d\n", crawmeraxLifeVariavelGlobal);
 		return crawmeraxLifeVariavelGlobal;
+
 	}else{
 		return 0;
 	}
@@ -115,47 +119,57 @@ int criandoStructBarbaro(){
 */
 
 int gameRun(){
-	int opcao;
+	int opcao=0;
 	int atBory;
 	int atDistance;
 	int atCure;
 	int atLife = 250;
-	int rodadas = 0;
-
+	int rodadas = 1;
 	// Estou chamando as funções para poder acessar os valores delas
 	criandoStructBarbaro();
+	srand(time(NULL));
 
-	printf("Executou");
 	while(1){
 		if (atLife <= 0){
 			printf("==================	CAMPO DE BATALHA  ====================\n");
 			printf("Parabens voce Crawmerax\n");
 			atLife = 0;
 			break;
-		}
-		cabecalhoGameRun();
+		}else{
+			if(rodadas % 2 == 1){
+				cabecalhoGameRun();
 
-		printf("Qual sua jogada?\n");
-		scanf("%d", &opcao);
+				printf("Qual sua jogada?\n");
+				scanf("%d", &opcao);
 
-		switch(opcao){
-			case 1:
-				rodadas++;
-				srand(time(NULL));
-				atBory = 1 + rand() % 6;
-				atBory += barbaroGlobal;
+				switch(opcao){
+					case 1:
+						atBory = 1 + rand() % 6;
+						atBory += barbaroGlobal;
 
-				if(rodadas == 1){
-					criandoStructCrawmerax(1, atLife); // (1, 250) 1 é o ataque e 250 é a vida
+						if(rodadas == 1){
+							criandoStructCrawmerax(1, atLife); // (1, 250) 1 é o ataque e 250 é a vida
+						}
+						atLife = crawmeraxLifeVariavelGlobal - atBory;
+						printf("\nAtaque do Barbaro: %d\n", atBory);
+						criandoStructCrawmerax(1, atLife);	
+
 				}
-				atLife = crawmeraxLifeVariavelGlobal - atBory;
-				printf("\nAtaque do Barbaro: %d\n", atBory);
-				criandoStructCrawmerax(1, atLife);
-				
-				
-
+			}else{
+				printf("Espere Crawmerax fazer sua jogada...\n");
+				opcao = 1+rand()%1;
+				switch(opcao){
+					case 1:
+						criandoStructCrawmerax(4, atLife);
+						printf(">>>>>>> Crawmerax(life): %d\n", atLife);
+						atBory = 1 + rand() % 6;
+						atBory += crawmeraxLifeVariavelGlobal;
+						printf(">>>>>>> Crawmerax(Dano): %d\n", crawmeraxLifeVariavelGlobal);
+				}
+			}
+			
 		}
-
+		rodadas++;
 	}
 }
 //
