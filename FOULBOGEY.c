@@ -83,7 +83,7 @@ int criandoStructCrawmerax(int jogada, int crawmeraxLife){
 		return 3;
 	}else if(jogada == 1){
 		crawmeraxLifeVariavelGlobal = Crawmerax.life = crawmeraxLife;
-		printf(">>>>>>>>>>>>>>%d", crawmeraxLifeVariavelGlobal);
+		printf("Crawmerax(Vida): %d\n", crawmeraxLifeVariavelGlobal);
 		return crawmeraxLifeVariavelGlobal;
 	}else{
 		return 0;
@@ -119,7 +119,7 @@ int gameRun(){
 	int atBory;
 	int atDistance;
 	int atCure;
-	int atLife;
+	int atLife = 250;
 	int rodadas = 0;
 
 	// Estou chamando as funções para poder acessar os valores delas
@@ -127,6 +127,12 @@ int gameRun(){
 
 	printf("Executou");
 	while(1){
+		if (atLife <= 0){
+			printf("==================	CAMPO DE BATALHA  ====================\n");
+			printf("Parabens voce Crawmerax\n");
+			atLife = 0;
+			break;
+		}
 		cabecalhoGameRun();
 
 		printf("Qual sua jogada?\n");
@@ -136,30 +142,15 @@ int gameRun(){
 			case 1:
 				rodadas++;
 				srand(time(NULL));
-				//printf("\nataque antes: %d\n", barbaroGlobal);
 				atBory = 1 + rand() % 6;
-				//printf("\nataque rand: %d\n", atBory);
 				atBory += barbaroGlobal;
 
-				
-				printf("\nataque Final: %d\n", atBory);
-
 				if(rodadas == 1){
-					criandoStructCrawmerax(1, 250); // (1, 250) 1 é o ataque e 250 é a vida
-					printf("Entrou na rodada %d", rodadas);
-				}else{
-					printf("Entrou na rodada %d", rodadas);
-					// Tirando vida do crawmerax de acordo com o ataque atBory
-					printf(">>>>>>>>>>>>%d", crawmeraxLifeVariavelGlobal);
-					atLife = crawmeraxLifeVariavelGlobal - atBory;
-					criandoStructCrawmerax(1, atLife);
-
-					printf("\nCrawmerax(vida) - %d\n", atLife); 
-					/* A cada vez que while da um loop o life do Crawmerx volta a ser 250
-					 * temos que ajeitar isso!
-					 *	
-					*/
+					criandoStructCrawmerax(1, atLife); // (1, 250) 1 é o ataque e 250 é a vida
 				}
+				atLife = crawmeraxLifeVariavelGlobal - atBory;
+				printf("\nAtaque do Barbaro: %d\n", atBory);
+				criandoStructCrawmerax(1, atLife);
 				
 				
 
