@@ -196,9 +196,9 @@ int gameRun(){
 					criandoStructBarbaro(4, 220);
 					criandoStructCrawmerax(1, 250);
 					if(rodada == 1){
-						singlePlayer(jogadorOne,220, 250,"BARBARO", rodada);
+						singlePlayer(jogadorOne,220, 250, classInvocadorVariavelGlobal, rodada);
 					}else{
-						singlePlayer(jogadorOne,barbaroLife - dano, crawmeraxLife,"BARBARO", rodada);
+						singlePlayer(jogadorOne,barbaroLife - dano, crawmeraxLife, classInvocadorVariavelGlobal, rodada);
 					}
 					printf("\n%s: Ataque Base %d\n", classInvocadorVariavelGlobal, barbaroLifeVariavelGlobal);
 					atBory = 1 + rand() % 5;
