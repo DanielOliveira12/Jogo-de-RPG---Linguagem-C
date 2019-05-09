@@ -8,7 +8,6 @@ int barbaroGlobal;
 int crawmeraxLifeVariavelGlobal;
 char jogadorOne[TAM];
 int barbaroLifeVariavelGlobal;
-int dano=0;
 char classInvocadorVariavelGlobal[TAM];
 
 void delay(int numberSeconds){ 
@@ -178,8 +177,9 @@ int gameRun(){
 	int atCure;
 	int crawmeraxLife;
 	int ab = 0;
-	int barbaroLife;
+	int barbaroLife = 220;
 
+	int dano = 0;
 	int rodada =1;
 	char classe[TAM];
 	// Estou chamando as funções para poder acessar os valores delas
@@ -196,9 +196,9 @@ int gameRun(){
 					criandoStructBarbaro(4, 220);
 					criandoStructCrawmerax(1, 250);
 					if(rodada == 1){
-						singlePlayer(jogadorOne,220, 250, classInvocadorVariavelGlobal, rodada);
+						singlePlayer(jogadorOne, 220, 250, classInvocadorVariavelGlobal, rodada);
 					}else{
-						singlePlayer(jogadorOne,barbaroLife - dano, crawmeraxLife, classInvocadorVariavelGlobal, rodada);
+						singlePlayer(jogadorOne,barbaroLife, crawmeraxLife, classInvocadorVariavelGlobal, rodada);
 					}
 					printf("\n%s: Ataque Base %d\n", classInvocadorVariavelGlobal, barbaroLifeVariavelGlobal);
 					atBory = 1 + rand() % 5;
@@ -210,7 +210,7 @@ int gameRun(){
 					// Tirando vida do crawmerax de acordo com o ataque atBory
 					ab += atBory;
 					crawmeraxLife = crawmeraxLifeVariavelGlobal - ab;
-					barbaroLife = criandoStructBarbaro(1,220);
+					barbaroLife = criandoStructBarbaro(1, barbaroLife);
 					rodada++;
 
 					break;
@@ -231,8 +231,8 @@ int gameRun(){
 */
 			}
 		}else{
-			int aux;
-			singlePlayer(jogadorOne,barbaroLife - aux, crawmeraxLife, classInvocadorVariavelGlobal, rodada);
+			int aux = 0;
+			singlePlayer(jogadorOne,barbaroLife, crawmeraxLife, classInvocadorVariavelGlobal, rodada);
 			printf("...Espere Crawmerax fazer sua jogada...\n");
 			delay(5);
 			opcao = 1+rand()%3;
@@ -246,10 +246,9 @@ int gameRun(){
 					atBory += crawmeraxLifeVariavelGlobal;
 					printf("\nCrawmerx: Ataque Final %d\n", atBory);
 
-					aux += atBory;
-					dano =aux;
+					barbaroLife -= atBory;
 
-					singlePlayer(jogadorOne,barbaroLife - aux, crawmeraxLife, classInvocadorVariavelGlobal, rodada);
+					singlePlayer(jogadorOne,barbaroLife, crawmeraxLife, classInvocadorVariavelGlobal, rodada);
 
 					break;
 				case 2:
