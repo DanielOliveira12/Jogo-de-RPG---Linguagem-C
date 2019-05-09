@@ -92,8 +92,6 @@ int criandoStructCrawmerax(int jogada, int crawmeraxLife){
 	}else{
 		return 0;
 	}
-
-	return crawmeraxLifeVariavelGlobal;
 }
 int criandoStructBarbaro(){
 	struct barbaro{
@@ -123,17 +121,17 @@ int gameRun(){
 	int atBory;
 	int atDistance;
 	int atCure;
-	int atLife = 250;
+	int crawLife = 250;
 	int rodadas = 1;
 	// Estou chamando as funções para poder acessar os valores delas
 	criandoStructBarbaro();
 	srand(time(NULL));
 
 	while(1){
-		if (atLife <= 0){
+		if (crawLife <= 0){
 			printf("==================	CAMPO DE BATALHA  ====================\n");
 			printf("Parabens voce Crawmerax\n");
-			atLife = 0;
+			crawLife = 0;
 			break;
 		}else{
 			if(rodadas % 2 == 1){
@@ -147,24 +145,47 @@ int gameRun(){
 						atBory = 1 + rand() % 6;
 						atBory += barbaroGlobal;
 
-						if(rodadas == 1){
-							criandoStructCrawmerax(1, atLife); // (1, 250) 1 é o ataque e 250 é a vida
-						}
-						atLife = crawmeraxLifeVariavelGlobal - atBory;
-						printf("\nAtaque do Barbaro: %d\n", atBory);
-						criandoStructCrawmerax(1, atLife);	
+						criandoStructCrawmerax(1, crawLife);
+						crawLife = crawmeraxLifeVariavelGlobal - atBory;
+						printf("\nAtaque do Barbaro: %d\n", atBory);	
 
 				}
 			}else{
 				printf("Espere Crawmerax fazer sua jogada...\n");
-				opcao = 1+rand()%1;
+				opcao = 1+rand()%3;
 				switch(opcao){
 					case 1:
-						criandoStructCrawmerax(4, atLife);
-						printf(">>>>>>> Crawmerax(life): %d\n", atLife);
+						criandoStructCrawmerax(4, crawLife);
+						printf(">>>>>>> Crawmerax(life): %d\n", crawLife);
 						atBory = 1 + rand() % 6;
 						atBory += crawmeraxLifeVariavelGlobal;
-						printf(">>>>>>> Crawmerax(Dano): %d\n", crawmeraxLifeVariavelGlobal);
+						printf(">>>>>>> Crawmerax(Dano): %d\n", atBory);
+
+						// Falta adicionar o dano na vida do barbaro
+						break;
+					case 2:
+						criandoStructCrawmerax(2, crawLife);
+						printf(">>>>>>> Crawmerax(life): %d\n", crawLife);
+						atDistance = 1 + rand() % 6;
+						atDistance += crawmeraxLifeVariavelGlobal;
+						printf(">>>>>>> Crawmerax(Dano): %d\n", atDistance);
+
+						// Falta adicionar o dano na vida do barbaro
+						break;
+					case 3:
+						criandoStructCrawmerax(3, crawLife);
+						printf(">>>>>>> Crawmerax(life): %d\n", crawLife);
+						atCure = 1 + rand() % 4;
+						atCure += crawmeraxLifeVariavelGlobal;
+						crawLife += atCure;
+						printf(">>>>>>> Crawmerax(Cura): %d\n", atCure);
+						printf(">>>>>>> Crawmerax(Curado): %d\n", crawLife);
+
+						// Falta adicionar o dano na vida do barbaro
+						break;
+
+
+
 				}
 			}
 			
