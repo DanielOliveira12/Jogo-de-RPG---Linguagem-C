@@ -147,7 +147,7 @@ int gameRun(){
 	int atDistance;
 	int atCure;
 	int crawmeraxLife=250;
-	int ab=0, ad = 0;
+	int ab=0, ad = 0, ac=0;
 	int barbaroLife = 220;
 
 	int dano = 0;
@@ -199,6 +199,20 @@ int gameRun(){
 					barbaroLife = criandoStructBarbaro(1, barbaroLife);
 					rodada++;
 					break;
+				case 3:
+					criandoStructBarbaro(3, barbaroLife);
+					criandoStructCrawmerax(1, crawmeraxLife);
+					singlePlayer(jogadorOne,barbaroLife, crawmeraxLife, classInvocadorVariavelGlobal, rodada);
+					printf("\n %s: Cura base: %d \n", classInvocadorVariavelGlobal, atCure);
+					atCure =1+rand()%3;
+					printf("\n %s: Cura adicional: %d \n", classInvocadorVariavelGlobal, atCure);
+					atCure = barbaroLifeVariavelGlobal;
+					printf("\n %s: Cura final: %d \n", classInvocadorVariavelGlobal, atCure);
+
+					ac+= atCure;
+					barbaroLife = criandoStructBarbaro(1, barbaroLife);
+					barbaroLife = barbaroLifeVariavelGlobal +ac;
+					rodada++;
 
 			}
 		}else{
@@ -242,7 +256,6 @@ int gameRun(){
 					printf("\nCrawmerax: Vida %d\n", crawmeraxLife);
 					// Falta adicionar o dano na vida do barbaro
 					break;
-
 
 			}
 			rodada++;
