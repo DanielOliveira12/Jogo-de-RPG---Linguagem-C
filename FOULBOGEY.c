@@ -215,11 +215,11 @@ int gameRun(){
 					break;
 				//case 2:
 				//	singlePlayer(jogadorOne,barbaroLife, crawmeraxLife, classInvocadorVariavelGlobal, rodada);
+
 				//	printf("\nAtaque a distancia Base: %d\n", barbaroGlobal);
 				/*	atBory = 1 + rand() % 5;
 					printf("\nataque adicional: %d\n", atBory);
 					atBory += barbaroGlobal;
-					printf("\nataque Final: %d\n", atBory);
 					// Tirando vida do crawmerax de acordo com o ataque atBory
 					ab += atBory;
 					crawmeraxLife = crawmeraxLifeVariavelGlobal - ab;
