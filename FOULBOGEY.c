@@ -303,5 +303,6 @@ int main(void){
 	
 	//cONE = classCharacter();
 	//singlePlayer(playerOne, 100, 100, cONE);
+	//teste
 	return 0;
 }
