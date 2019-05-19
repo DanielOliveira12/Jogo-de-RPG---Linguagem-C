@@ -140,7 +140,7 @@ int structPersona(int classe, int jogada, int lifePersona){
 
 char *classCharacter(int classe){
 	char *characOne;
-	characOne = malloc(TAM*sizeof(char));
+	characOne = (char*)malloc(TAM*sizeof(char));
 
 	switch(classe){
 		case 01:
