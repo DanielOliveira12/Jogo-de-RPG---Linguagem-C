@@ -140,7 +140,7 @@ int structPersona(int classe, int jogada, int lifePersona){
 
 char *classCharacter(int classe){
 	char *characOne;
-	characOne = (char*)malloc(TAM*sizeof(char));
+	characOne = malloc(TAM*sizeof(char));
 
 	switch(classe){
 		case 01:
@@ -274,11 +274,11 @@ int gameTeste(){
 			singlePlayer(jogadorOne,personaLife, crawmeraxLife, nameClassInvocadorG, rodada);
 			printf("...Espere Crawmerax fazer sua jogada...\n");
 			delay(5);
-			opcao = 1+rand()%1;
+			opcao = 1+rand()%3;
 			switch(opcao){
 				case 1:
 					criandoStructCrawmerax(4, crawmeraxLife);
-
+					printf("CRAWMERAX ESCOLHEU ATAQUE CORPO A CORPO!\n");
 					printf("\nCrawmerx: Ataque Base %d\n", crawmeraxLifeVariavelGlobal);
 					atBody = 1 + rand() % 5;
 					printf("\nCrawmerx: Ataque Adicional +%d\n", atBody);
@@ -286,8 +286,31 @@ int gameTeste(){
 					printf("\nCrawmerx: Ataque Final %d\n", atBody);
 					personaLife -= atBody;
 					singlePlayer(jogadorOne, personaLife, crawmeraxLife, nameClassInvocadorG, rodada);
+					break;
+				case 2:
+					criandoStructCrawmerax(2, crawmeraxLife);
+					printf("CRAWMERAX ESCOLHEU ATAQUE A DISTANCIA!\n");
+					printf("\n Crawmerax: Ataque base %d\n",crawmeraxLifeVariavelGlobal);
+					atDistance = 1+rand()%5;
+					printf("\n Crawmerax: Ataque adicional +%d\n",atDistance);
+					atDistance += crawmeraxLifeVariavelGlobal;
+					printf("\n Crawmerax: Ataque Final %d\n", atDistance);
+					personaLife -=atDistance;
+					singlePlayer(jogadorOne, personaLife, crawmeraxLife, nameClassInvocadorG, rodada);
+					break;
+				case 3:
+					criandoStructCrawmerax(3, crawmeraxLife);
+					printf("CRAWMERAX ESCOLHEU CURAR SE!\n");
+					printf("\n Crawmerax: cura base %d\n",crawmeraxLifeVariavelGlobal);
+					cure= 1+rand()%10;
+					printf("\n Crawmerax: Cura adicional +%d\n", cure);
+					cure += crawmeraxLifeVariavelGlobal;
+					printf("\n Crawmerax: cura final %d\n", cure);
+					crawmeraxLife +=cure;
+					
 
-				break;
+					singlePlayer(jogadorOne, personaLife, crawmeraxLife, nameClassInvocadorG, rodada);
+					break;
 			}
 			rodada++;
 		}
