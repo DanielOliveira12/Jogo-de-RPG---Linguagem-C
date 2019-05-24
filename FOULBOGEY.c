@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 #include <time.h>
 #define TAM 50
@@ -52,7 +53,7 @@ int cabecalhoWinner(char playerOne[TAM], int lifeOne, int lifeCraw, char charact
 	printf("+	Inimigo: Crawmerax 		Vida: %d  		Rodada: %d\n", lifeCraw, rodada);
 	printf("+																						  \n");
 	printf("+																						  \n");
-	printf("+		>>>>>>  Parabens, voce derrotou o %s  <<<<<<<					  \n", defeatedPlayer);
+	printf("+		   >>>>>>  %s  <<<<<<<					  \n", defeatedPlayer);
 	printf("+																						  \n");
 	printf("========================================================================================\n");
 }
@@ -195,6 +196,11 @@ int gameTeste(){
 	int atDistance;
 	int cure;
 
+	int crawmeraxCarapace;
+	bool chosenAction; // True quando o jogador escolhe ataque corpo a corpo
+	char phraseWinner[TAM];
+
+
 	int crawmeraxLife=250;
 	int ab=0, ad = 0, ac=0;
 	int personaLife;
@@ -226,10 +232,12 @@ int gameTeste(){
 	}
 	while(1){
 		if(crawmeraxLife <= 0){
-			cabecalhoWinner(jogadorOne,personaLife, 0, nameClassInvocadorG, rodada, "Crawmerax");
+			strcpy(phraseWinner, "Crawmerax foi destruido!");
+			cabecalhoWinner(jogadorOne,personaLife, 0, nameClassInvocadorG, rodada, phraseWinner);
 			break;
 		}else if(personaLife <= 0){
-			cabecalhoWinner(jogadorOne, 0, crawmeraxLife, nameClassInvocadorG, rodada, nameClassInvocadorG);
+			strcpy(phraseWinner, "voce foi destruido!");
+			cabecalhoWinner(jogadorOne, 0, crawmeraxLife, nameClassInvocadorG, rodada, phraseWinner);
 			break;
 		}
 		if (rodada%2==1){
@@ -256,29 +264,49 @@ int gameTeste(){
 					printf("\n%s: Ataque Final %d\n", nameClassInvocadorG, atBody);
 
 					// Tirando vida do crawmerax de acordo com o ataque atBory
-					crawmeraxLife -= atBody;
-					personaLife = structPersona(classInvocadorG, 1, personaLife);
+					if(crawmeraxLife <= 38){ // Validando a ativação da carapaça do Crawmerax
+						printf("\n>>>> Crawmerax ativou sua Armadura e bloqueou 30%% do seu ataque <<<<\n");
+						crawmeraxCarapace = (atBody * 30)/100; // Calculando o bloqueando 30% do ataque
+						atBody -= crawmeraxCarapace; // Bloqueando 30% ataque
+						crawmeraxLife -= atBody;
+						printf("\nBloqueou -%d de dano\n", crawmeraxCarapace);
+					}else{
+						crawmeraxLife -= atBody;
+					}
+					
+					printf("Ta chegando aqui");
+					chosenAction = true;
 					rodada++;
 					break;
 
 				case 2:
-					structPersona(classInvocadorG, 1, personaLife);
+					structPersona(classInvocadorG, 2, personaLife);
 					criandoStructCrawmerax(1, crawmeraxLife);
 					if(rodada == 1){
 						singlePlayer(jogadorOne, personaLife, 250, nameClassInvocadorG, rodada);
 					}else{
 						singlePlayer(jogadorOne,personaLife, crawmeraxLife, nameClassInvocadorG, rodada);
 					}
-					structPersona(classInvocadorG, 2, personaLife);
+
 					printf("\n %s: Ataque base %d\n", nameClassInvocadorG, attackDistanceG);
 					atDistance = 1+rand() % addAtkDistance;
 					printf("\n %s ataque adicional +%d \n", classInvocadorVariavelGlobal, atDistance);
 					atDistance +=attackDistanceG;
 					printf("\n %s: Ataque final %d \n", classInvocadorVariavelGlobal, atDistance);
 
-					crawmeraxLife -= atDistance;
-					personaLife = structPersona(classInvocadorG, 1, personaLife);
+					// Tirando vida do crawmerax de acordo com o ataque atDistance
+					if(crawmeraxLife <= 38){ // Validando a ativação da carapaça do Crawmerax
+						printf("\n>>>> Crawmerax ativou sua Carapaça e bloqueou 30%% do seu ataque <<<<\n");
+						crawmeraxCarapace = (atDistance * 30)/100; // Calculando o bloqueando 30% do ataque
+						atDistance -= crawmeraxCarapace; // Bloqueando 30% ataque
+						crawmeraxLife -= atDistance;
+						printf("\nBloqueou -%d de dano\n", crawmeraxCarapace);
+					}else{
+						crawmeraxLife -= atDistance;
+					}
+					
 					rodada++; 
+					chosenAction = false;
 					break;
 
 				case 3:
@@ -289,7 +317,7 @@ int gameTeste(){
 					}else{
 						singlePlayer(jogadorOne,personaLife, crawmeraxLife, nameClassInvocadorG, rodada);
 					}
-					structPersona(classInvocadorG, 3, personaLife);
+
 					printf("\n %s: cura base %d\n", nameClassInvocadorG, selfHealingG);
 					cure = 1+rand() % addCure;
 					printf("\n %s: cura adicional +%d \n", classInvocadorVariavelGlobal, cure);
@@ -297,18 +325,30 @@ int gameTeste(){
 					printf("\n %s: cura final %d \n", classInvocadorVariavelGlobal, cure);
 
 					ac += cure;
-					personaLife = structPersona(classInvocadorG, 1, personaLife);
+					chosenAction = false;
 					rodada++; 
-
 					break;
 
 			}
 		}else{
 			int aux = 0;
+			bool activateCure; 
+
 			singlePlayer(jogadorOne,personaLife, crawmeraxLife, nameClassInvocadorG, rodada);
 			printf("\n >>>> Espere Crawmerax fazer sua jogada <<<<\n");
 			delay(5);
-			opcao = 1+rand()%3;
+
+			if(crawmeraxLife <= 75){ 
+				activateCure = rand() % 2; // 50% da opção ser a Cura
+				if (activateCure == 0){ // ataque vai ser Cura
+					opcao = 3;
+				}else{ // Ataque vai ser corpo a corpo ou a distancia
+					opcao = 1+rand()%2;
+				}
+			}else{
+				opcao = 1+rand()%3;
+			}
+
 			switch(opcao){
 				case 1:
 					criandoStructCrawmerax(4, crawmeraxLife);
@@ -317,6 +357,12 @@ int gameTeste(){
 					atBody = 1 + rand() % 5;
 					printf("\nCrawmerx: Ataque Adicional +%d\n", atBody);
 					atBody += crawmeraxLifeVariavelGlobal;
+
+					if (chosenAction == true){ // validando se Crawmerax tinha recebido ataque corpo a corpo
+						printf("\n>>>> Crawmerax recebeu mais 10%% de ataque adicional <<<<\n");
+						atBody += (atBody * 10)/100; // adicionando mais 10% de dano no ataque
+					}
+
 					printf("\nCrawmerx: Ataque Final %d\n", atBody);
 					personaLife -= atBody;
 					singlePlayer(jogadorOne, personaLife, crawmeraxLife, nameClassInvocadorG, rodada);
@@ -328,6 +374,12 @@ int gameTeste(){
 					atDistance = 1+rand()%5;
 					printf("\n Crawmerax: Ataque adicional +%d\n",atDistance);
 					atDistance += crawmeraxLifeVariavelGlobal;
+
+					if (chosenAction == true){ // validando se Crawmerax tinha recebido ataque corpo a corpo
+						printf("\n>>>> Crawmerax recebeu mais 10%% de ataque adicional <<<<\n");
+						atDistance += (atDistance * 10)/100; // adicionando mais 10% de dano no ataque
+					}
+
 					printf("\n Crawmerax: Ataque Final %d\n", atDistance);
 					personaLife -=atDistance;
 					singlePlayer(jogadorOne, personaLife, crawmeraxLife, nameClassInvocadorG, rodada);
@@ -385,8 +437,13 @@ int main(void){
 			//gameRun(); 
 			gameTeste();
 			break;
-			default:
-			printf("Opcao invalida \n");
+		case 2:
+			printf("\nEm breve!\n");
+			printf("\nProxima versao 1.0.1 FOULBOGEY\n");
+			break;
+		default:
+			printf("\nOpcao invalida \n");
+		
 		}
 
 	//cONE = classCharacter();
