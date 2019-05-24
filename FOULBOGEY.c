@@ -189,6 +189,50 @@ char *classCharacter(int classe){
 /* A batalha rola nessa função gameRun()
 * Aqui vai ser a funçao onde o usuario escolheram os ataque 
 * e aqui tambem a gente pode calcular os danos igual eu fiz ali :D */
+int funcaoCritical(int pLife, int classInvoc, int dano, int rodada){
+	int porcentagem;
+	switch(classInvoc){
+		case 1: 
+			if(pLife >= 45 && pLife <=88){
+				porcentagem = rand()%5;
+				if(porcentagem >=0 && porcentagem <=1){ 
+					dano *= 2;
+					printf("\nVOCE RECEBEU UM CRITICO DE: %d \n", dano);
+					return dano;
+				}else{
+					dano =0;
+					return dano;
+				}
+			}else if(pLife >=1 && pLife <=44){
+				porcentagem = rand()%10;
+				if(porcentagem != 8 && porcentagem !=9){
+					dano *=2;
+					return dano;
+				}else{
+					dano = 0;
+					return dano;
+				}
+			}
+
+			break;
+		case 2:
+			printf("Caso 2 - Arqueira");
+			break;
+		case 3:
+			if (pLife >= 45 && pLife <= 200){
+				porcentagem = rand() % 5;
+				if (porcentagem == 0 || porcentagem == 1){
+					printf("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+					printf("+		(Habilidade Ativada)	   	      +\n");
+					printf("+	Crawmerax teve seu proximo ataque bloqueado   +");
+					printf("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+				}
+			}
+			break;
+	}
+	return dano = 0;
+}
+
 
 int gameTeste(){
 	int opcao;
@@ -199,7 +243,7 @@ int gameTeste(){
 	int crawmeraxCarapace;
 	bool chosenAction; // True quando o jogador escolhe ataque corpo a corpo
 	char phraseWinner[TAM];
-
+	int critico;
 
 	int crawmeraxLife=250;
 	int ab=0, ad = 0, ac=0;
@@ -217,7 +261,7 @@ int gameTeste(){
 		addCure = 3;
 		strcpy(nameClassInvocadorG, "Barbaro");
 
-	}else if(classInvocadorG = 2){
+	}else if(classInvocadorG == 2){
 		personaLife = 200;
 		addAtkBody = 2;
 		addAtkDistance = 6;
@@ -259,10 +303,15 @@ int gameTeste(){
 					printf("\n%s: Ataque Base %d\n", nameClassInvocadorG, attackBodyG);
 					atBody = 1+ rand() % addAtkBody;
 					printf("\n%s: Ataque Adicional +%d\n", nameClassInvocadorG, atBody);
+
+					funcaoCritical(personaLife, classInvocadorG, atBody, rodada);
+					critico = funcaoCritical(personaLife, classInvocadorG, attackBodyG, rodada);
+					atBody+=critico;
+
 					atBody += attackBodyG;
 
 					printf("\n%s: Ataque Final %d\n", nameClassInvocadorG, atBody);
-
+					
 					// Tirando vida do crawmerax de acordo com o ataque atBory
 					if(crawmeraxLife <= 38){ // Validando a ativação da carapaça do Crawmerax
 						printf("\n>>>> Crawmerax ativou sua Armadura e bloqueou 30%% do seu ataque <<<<\n");
@@ -273,9 +322,8 @@ int gameTeste(){
 					}else{
 						crawmeraxLife -= atBody;
 					}
-					
-					printf("Ta chegando aqui");
-					chosenAction = true;
+
+					chosenAction = true; //True para cada vez que usuario usa ataque corpo a corpo
 					rodada++;
 					break;
 
@@ -291,7 +339,12 @@ int gameTeste(){
 					printf("\n %s: Ataque base %d\n", nameClassInvocadorG, attackDistanceG);
 					atDistance = 1+rand() % addAtkDistance;
 					printf("\n %s ataque adicional +%d \n", classInvocadorVariavelGlobal, atDistance);
-					atDistance +=attackDistanceG;
+
+					funcaoCritical(personaLife, classInvocadorG, attackDistanceG, rodada);
+					critico = funcaoCritical(personaLife, classInvocadorG, attackDistanceG, rodada);
+				    atDistance+=critico;
+					
+					atDistance += attackDistanceG;
 					printf("\n %s: Ataque final %d \n", classInvocadorVariavelGlobal, atDistance);
 
 					// Tirando vida do crawmerax de acordo com o ataque atDistance
@@ -323,6 +376,8 @@ int gameTeste(){
 					printf("\n %s: cura adicional +%d \n", classInvocadorVariavelGlobal, cure);
 					cure +=selfHealingG;
 					printf("\n %s: cura final %d \n", classInvocadorVariavelGlobal, cure);
+
+					funcaoCritical(personaLife, classInvocadorG, selfHealingG, rodada);
 
 					ac += cure;
 					chosenAction = false;
