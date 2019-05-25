@@ -462,6 +462,7 @@ int gameTeste(){
 					}else{
 						rodada++;
 						break;
+					}
 					rodada =(rodada+rod)+1;
 					break;
 			}
