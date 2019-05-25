@@ -203,8 +203,8 @@ int funcaoCritical(int pLife, int classInvoc, int dano, int rodada){
 			if(pLife >= 45 && pLife <=88){
 				porcentagem = rand()%5;
 				if(porcentagem >=0 && porcentagem <=1){ 
+					secretAbility(nameClassInvocadorG);
 					dano *= 2;
-					printf("\nFOI ACRESCENTADO UM CRITICO DE: %d \n", dano);
 					return dano;
 				}else{
 					dano =0;
@@ -213,6 +213,7 @@ int funcaoCritical(int pLife, int classInvoc, int dano, int rodada){
 			}else if(pLife >=1 && pLife <=44){
 				porcentagem = rand()%10;
 				if(porcentagem != 8 && porcentagem !=9){
+					secretAbility(nameClassInvocadorG);
 					dano *=2;
 					return dano;
 				}else{
@@ -223,7 +224,7 @@ int funcaoCritical(int pLife, int classInvoc, int dano, int rodada){
 			break;
 		case 2:
 			if(pLife >=61 && pLife <=80){
-				porcentagem = rand()%1;
+				porcentagem = rand()%5;//20%
 				if(porcentagem ==0){
 					secretAbility(nameClassInvocadorG);
 					rod = 1;
@@ -232,8 +233,8 @@ int funcaoCritical(int pLife, int classInvoc, int dano, int rodada){
 					return rod=0;
 				}
 			}else if(pLife>=1 && pLife <=60){
-				porcentagem = rand()%5;
-				if(porcentagem != 3 && porcentagem !=4){
+				porcentagem = rand()%10;//30%
+				if(porcentagem >= 7 && porcentagem <=9){
 					secretAbility(nameClassInvocadorG);
 					rod = 1;
 					return rod;
@@ -275,6 +276,7 @@ int gameTeste(){
 	int dano = 0;
 	int rodada =1,addAtkBody=0, addAtkDistance =0, addCure=0;
 	char classe[TAM];
+	int rod;
 	// Estou chamando as funções para poder acessar os valores delas
 	srand(time(NULL));
 
@@ -350,7 +352,7 @@ int gameTeste(){
 					
 					//printf("Ta chegando aqui");
 					chosenAction = true;
-					int rod = funcaoCritical(personaLife, classInvocadorG, 0, rodada);
+					rod = funcaoCritical(personaLife, classInvocadorG, 0, rodada);
 					//printf("\n>>>>>>>>>>>>>>>>>>>%d<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n",rod);
 					rodada =(rodada+rod)+1;
 					break;
@@ -385,7 +387,9 @@ int gameTeste(){
 						crawmeraxLife -= atDistance;
 					}
 					
-					rodada++; 
+					rod = funcaoCritical(personaLife, classInvocadorG, 0, rodada);
+					//printf("\n>>>>>>>>>>>>>>>>>>>%d<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n",rod);
+					rodada =(rodada+rod)+1;
 					chosenAction = false;
 					break;
 
@@ -408,7 +412,10 @@ int gameTeste(){
 
 					ac += cure;
 					chosenAction = false;
-					rodada++; 
+					personaLife += ac;
+					rod = funcaoCritical(personaLife, classInvocadorG, 0, rodada);
+					//printf("\n>>>>>>>>>>>>>>>>>>>%d<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n",rod);
+					rodada =(rodada+rod)+1;
 					break;
 			}
 		}else{
