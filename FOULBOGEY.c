@@ -219,14 +219,29 @@ int funcaoCritical(int pLife, int classInvoc, int dano, int rodada){
 			printf("Caso 2 - Arqueira");
 			break;
 		case 3:
-			if (pLife >= 45 && pLife <= 200){
+			if (pLife >= 55 && pLife <= 90){
 				porcentagem = rand() % 5;
 				if (porcentagem == 0 || porcentagem == 1){
 					printf("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 					printf("+		(Habilidade Ativada)	   	      +\n");
 					printf("+	Crawmerax teve seu proximo ataque bloqueado   +");
 					printf("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+					printf(">>>>>>>>>>> %d\n", rodada);
+					rodada += 1;
+					printf(">>>>>>>>>>> %d\n", rodada);
 				}
+			}else if(pLife >= 1 && pLife <= 54){
+				porcentagem = rand() % 10;
+				if(porcentagem != 8 && porcentagem !=9){
+					printf("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+					printf("+		(Habilidade Ativada)	   	      +\n");
+					printf("+	Crawmerax teve seu proximo ataque bloqueado   +");
+					printf("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+					printf(">>>>>>>>>>> %d\n", rodada);
+					rodada += 1;
+					printf(">>>>>>>>>>> %d\n", rodada);
+				}
+					
 			}
 			break;
 	}
