@@ -74,6 +74,12 @@ void cabecalhoGameRun(){
 	printf("02 - Ataque a Distancia");
 	printf("\n03 - Curar ");
 }
+void secretAbility(char *class){
+	printf("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+	printf("+		        (HABILIDADE ATIVADA)	        	     \n");
+	printf("+	 %s Habilitou sua habilidade secreta             \n", class);
+	printf("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+}
 
 char *classCharacter(int classe);
 
@@ -190,14 +196,15 @@ char *classCharacter(int classe){
 * Aqui vai ser a funçao onde o usuario escolheram os ataque 
 * e aqui tambem a gente pode calcular os danos igual eu fiz ali :D */
 int funcaoCritical(int pLife, int classInvoc, int dano, int rodada){
-	int porcentagem;
+	int porcentagem =0;
+	int rod =0;
 	switch(classInvoc){
 		case 1: 
 			if(pLife >= 45 && pLife <=88){
 				porcentagem = rand()%5;
 				if(porcentagem >=0 && porcentagem <=1){ 
 					dano *= 2;
-					printf("\nVOCE RECEBEU UM CRITICO DE: %d \n", dano);
+					printf("\nFOI ACRESCENTADO UM CRITICO DE: %d \n", dano);
 					return dano;
 				}else{
 					dano =0;
@@ -213,10 +220,27 @@ int funcaoCritical(int pLife, int classInvoc, int dano, int rodada){
 					return dano;
 				}
 			}
-
 			break;
 		case 2:
-			printf("Caso 2 - Arqueira");
+			if(pLife >=61 && pLife <=80){
+				porcentagem = rand()%1;
+				if(porcentagem ==0){
+					secretAbility(nameClassInvocadorG);
+					rod = 1;
+					return rod;
+				}else{
+					return rod=0;
+				}
+			}else if(pLife>=1 && pLife <=60){
+				porcentagem = rand()%5;
+				if(porcentagem != 3 && porcentagem !=4){
+					secretAbility(nameClassInvocadorG);
+					rod = 1;
+					return rod;
+				}else{
+					return rod=0;
+				}
+			}
 			break;
 		case 3:
 			if (pLife >= 55 && pLife <= 90){
@@ -318,11 +342,12 @@ int gameTeste(){
 					printf("\n%s: Ataque Base %d\n", nameClassInvocadorG, attackBodyG);
 					atBody = 1+ rand() % addAtkBody;
 					printf("\n%s: Ataque Adicional +%d\n", nameClassInvocadorG, atBody);
-
-					funcaoCritical(personaLife, classInvocadorG, atBody, rodada);
-					critico = funcaoCritical(personaLife, classInvocadorG, attackBodyG, rodada);
-					atBody+=critico;
-
+					//funcaoCritical(personalife, classInvocadorG, atBody);
+					if(classInvocadorG == 1){
+						funcaoCritical(personaLife, classInvocadorG, attackBodyG, rodada);
+						critico = funcaoCritical(personaLife, classInvocadorG, attackBodyG, rodada);
+						atBody+=critico;
+					}
 					atBody += attackBodyG;
 
 					printf("\n%s: Ataque Final %d\n", nameClassInvocadorG, atBody);
@@ -337,11 +362,13 @@ int gameTeste(){
 					}else{
 						crawmeraxLife -= atBody;
 					}
-
-					chosenAction = true; //True para cada vez que usuario usa ataque corpo a corpo
-					rodada++;
+					
+					//printf("Ta chegando aqui");
+					chosenAction = true;
+					int rod = funcaoCritical(personaLife, classInvocadorG, 0, rodada);
+					//printf("\n>>>>>>>>>>>>>>>>>>>%d<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n",rod);
+					rodada =(rodada+rod)+1;
 					break;
-
 				case 2:
 					structPersona(classInvocadorG, 2, personaLife);
 					criandoStructCrawmerax(1, crawmeraxLife);
@@ -398,7 +425,6 @@ int gameTeste(){
 					chosenAction = false;
 					rodada++; 
 					break;
-
 			}
 		}else{
 			int aux = 0;
@@ -504,7 +530,6 @@ int main(void){
 			delay(6);
 			clear();
 
-			//gameRun(); 
 			gameTeste();
 			break;
 		case 2:
@@ -515,9 +540,5 @@ int main(void){
 			printf("\nOpcao invalida \n");
 		
 		}
-
-	//cONE = classCharacter();
-	//singlePlayer(playerOne, 100, 100, cONE);
-		return 0;
-	}
-	//Sem mago, e arqueiro, está dando 375 Linhas;
+	return 0;
+}
