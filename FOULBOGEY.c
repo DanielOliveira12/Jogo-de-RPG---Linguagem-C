@@ -80,6 +80,7 @@ void secretAbility(char *class){
 	printf("+	 %s Habilitou sua habilidade secreta             \n", class);
 	printf("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 }
+
 char *classCharacter(int classe);
 
 
@@ -194,7 +195,7 @@ char *classCharacter(int classe){
 /* A batalha rola nessa função gameRun()
 * Aqui vai ser a funçao onde o usuario escolheram os ataque 
 * e aqui tambem a gente pode calcular os danos igual eu fiz ali :D */
-int funcaoCritical(int pLife, int classInvoc, int dano){
+int funcaoCritical(int pLife, int classInvoc, int dano, int rodada){
 	int porcentagem =0;
 	int rod =0;
 	switch(classInvoc){
@@ -241,8 +242,19 @@ int funcaoCritical(int pLife, int classInvoc, int dano){
 				}
 			}
 			break;
+		case 3:
+			if (pLife >= 45 && pLife <= 200){
+				porcentagem = rand() % 5;
+				if (porcentagem == 0 || porcentagem == 1){
+					printf("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+					printf("+		(Habilidade Ativada)	   	      +\n");
+					printf("+	Crawmerax teve seu proximo ataque bloqueado   +");
+					printf("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+				}
+			}
+			break;
 	}
-	return dano=0;
+	return dano = 0;
 }
 
 
@@ -267,14 +279,14 @@ int gameTeste(){
 	srand(time(NULL));
 
 	if(classInvocadorG == 1){
-		personaLife = 100;
+		personaLife = 220;
 		addAtkBody = 3;
 		addAtkDistance = 2;
 		addCure = 3;
 		strcpy(nameClassInvocadorG, "Barbaro");
 
 	}else if(classInvocadorG == 2){
-		personaLife = 100;
+		personaLife = 200;
 		addAtkBody = 2;
 		addAtkDistance = 6;
 		addCure = 3;
@@ -317,8 +329,8 @@ int gameTeste(){
 					printf("\n%s: Ataque Adicional +%d\n", nameClassInvocadorG, atBody);
 					//funcaoCritical(personalife, classInvocadorG, atBody);
 					if(classInvocadorG == 1){
-						funcaoCritical(personaLife, classInvocadorG, attackBodyG);
-						critico = funcaoCritical(personaLife, classInvocadorG, attackBodyG);
+						funcaoCritical(personaLife, classInvocadorG, attackBodyG, rodada);
+						critico = funcaoCritical(personaLife, classInvocadorG, attackBodyG, rodada);
 						atBody+=critico;
 					}
 					atBody += attackBodyG;
@@ -338,11 +350,10 @@ int gameTeste(){
 					
 					//printf("Ta chegando aqui");
 					chosenAction = true;
-					int rod = funcaoCritical(personaLife, classInvocadorG, 0);
+					int rod = funcaoCritical(personaLife, classInvocadorG, 0, rodada);
 					//printf("\n>>>>>>>>>>>>>>>>>>>%d<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n",rod);
 					rodada =(rodada+rod)+1;
 					break;
-
 				case 2:
 					structPersona(classInvocadorG, 2, personaLife);
 					criandoStructCrawmerax(1, crawmeraxLife);
@@ -355,11 +366,12 @@ int gameTeste(){
 					printf("\n %s: Ataque base %d\n", nameClassInvocadorG, attackDistanceG);
 					atDistance = 1+rand() % addAtkDistance;
 					printf("\n %s ataque adicional +%d \n", classInvocadorVariavelGlobal, atDistance);
-					funcaoCritical(personaLife, classInvocadorG, attackDistanceG);
-					critico = funcaoCritical(personaLife, classInvocadorG, attackDistanceG);
+
+					funcaoCritical(personaLife, classInvocadorG, attackDistanceG, rodada);
+					critico = funcaoCritical(personaLife, classInvocadorG, attackDistanceG, rodada);
 				    atDistance+=critico;
 					
-					atDistance +=attackDistanceG;
+					atDistance += attackDistanceG;
 					printf("\n %s: Ataque final %d \n", classInvocadorVariavelGlobal, atDistance);
 
 					// Tirando vida do crawmerax de acordo com o ataque atDistance
@@ -391,6 +403,8 @@ int gameTeste(){
 					printf("\n %s: cura adicional +%d \n", classInvocadorVariavelGlobal, cure);
 					cure +=selfHealingG;
 					printf("\n %s: cura final %d \n", classInvocadorVariavelGlobal, cure);
+
+					funcaoCritical(personaLife, classInvocadorG, selfHealingG, rodada);
 
 					ac += cure;
 					chosenAction = false;
@@ -501,7 +515,6 @@ int main(void){
 			delay(6);
 			clear();
 
-			//gameRun(); 
 			gameTeste();
 			break;
 		case 2:
@@ -509,6 +522,8 @@ int main(void){
 			printf("\nProxima versao 1.0.1 FOULBOGEY\n");
 			break;
 		default:
-			printf("\nOpcao invalida \n");	
-	}
+			printf("\nOpcao invalida \n");
+		
+		}
+	return 0;
 }
