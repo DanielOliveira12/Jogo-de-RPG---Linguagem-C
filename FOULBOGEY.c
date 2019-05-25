@@ -448,6 +448,7 @@ int gameTeste(){
 					funcaoCritical(personaLife, classInvocadorG, selfHealingG, rodada);
 
 					ac += cure;
+					personaLife += ac;
 					chosenAction = false;
 					if(classInvocadorG == 2 ){
 						int rod = funcaoCritical(personaLife, classInvocadorG, 0, rodada);
@@ -528,7 +529,7 @@ int gameTeste(){
 					printf("\n Crawmerax: Cura adicional +%d\n", cure);
 					cure += crawmeraxLifeVariavelGlobal;
 					printf("\n Crawmerax: cura final %d\n", cure);
-					crawmeraxLife +=cure;
+					crawmeraxLife += cure;
 					
 
 					singlePlayer(jogadorOne, personaLife, crawmeraxLife, nameClassInvocadorG, rodada);
