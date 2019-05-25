@@ -244,17 +244,34 @@ int funcaoCritical(int pLife, int classInvoc, int dano, int rodada){
 			}
 			break;
 		case 3:
-			if (pLife >= 45 && pLife <= 200){
+			if (pLife >= 55 && pLife <= 90){
 				porcentagem = rand() % 5;
 				if (porcentagem == 0 || porcentagem == 1){
 					printf("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 					printf("+		(Habilidade Ativada)	   	      +\n");
 					printf("+	Crawmerax teve seu proximo ataque bloqueado   +");
 					printf("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+
+					return rod = 1;
+				}else{
+					return rod;
 				}
+			}else if(pLife >= 1 && pLife <= 54){
+				porcentagem = rand() % 10;
+				if(porcentagem != 7 && porcentagem !=8 && porcentagem !=9){
+					printf("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+					printf("+		(Habilidade Ativada)	   	      +\n");
+					printf("+	Crawmerax teve seu proximo ataque bloqueado   +");
+					printf("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+
+					return rod = 1;
+				}else{
+					return rod;
+				}
+					
 			}
 			break;
-	}
+		}
 	return dano = 0;
 }
 
@@ -352,10 +369,21 @@ int gameTeste(){
 					
 					//printf("Ta chegando aqui");
 					chosenAction = true;
-					rod = funcaoCritical(personaLife, classInvocadorG, 0, rodada);
-					//printf("\n>>>>>>>>>>>>>>>>>>>%d<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n",rod);
-					rodada =(rodada+rod)+1;
-					break;
+					if(classInvocadorG == 2 ){
+						int rod = funcaoCritical(personaLife, classInvocadorG, 0, rodada);
+						//printf("\n>>>>>>>>>>>>>>>>>>>%d<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n",rod);
+						rodada =(rodada+rod)+1;
+						break;
+					}else if(classInvocadorG == 3){
+						int rod = funcaoCritical(personaLife, classInvocadorG, 0, rodada);
+						//printf("\n>>>>>>>>>>>>>>>>>>>%d<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n",rod);
+						rodada =(rodada+rod)+1;
+						break;
+					}else{
+						rodada++;
+						break;
+					}
+					
 				case 2:
 					structPersona(classInvocadorG, 2, personaLife);
 					criandoStructCrawmerax(1, crawmeraxLife);
@@ -386,13 +414,22 @@ int gameTeste(){
 					}else{
 						crawmeraxLife -= atDistance;
 					}
-					
-					rod = funcaoCritical(personaLife, classInvocadorG, 0, rodada);
-					//printf("\n>>>>>>>>>>>>>>>>>>>%d<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n",rod);
-					rodada =(rodada+rod)+1;
+					if(classInvocadorG == 2 ){
+						int rod = funcaoCritical(personaLife, classInvocadorG, 0, rodada);
+						//printf("\n>>>>>>>>>>>>>>>>>>>%d<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n",rod);
+						rodada =(rodada+rod)+1;
+						break;
+					}else if(classInvocadorG == 3){
+						int rod = funcaoCritical(personaLife, classInvocadorG, 0, rodada);
+						//printf("\n>>>>>>>>>>>>>>>>>>>%d<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n",rod);
+						rodada =(rodada+rod)+1;
+						break;
+					}else{
+						rodada++;
+						break;
 					chosenAction = false;
 					break;
-
+				    }
 				case 3:
 					structPersona(classInvocadorG, 3, personaLife);
 					criandoStructCrawmerax(1, crawmeraxLife);
@@ -412,9 +449,19 @@ int gameTeste(){
 
 					ac += cure;
 					chosenAction = false;
-					personaLife += ac;
-					rod = funcaoCritical(personaLife, classInvocadorG, 0, rodada);
-					//printf("\n>>>>>>>>>>>>>>>>>>>%d<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n",rod);
+					if(classInvocadorG == 2 ){
+						int rod = funcaoCritical(personaLife, classInvocadorG, 0, rodada);
+						//printf("\n>>>>>>>>>>>>>>>>>>>%d<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n",rod);
+						rodada =(rodada+rod)+1;
+						break;
+					}else if(classInvocadorG == 3){
+						int rod = funcaoCritical(personaLife, classInvocadorG, 0, rodada);
+						//printf("\n>>>>>>>>>>>>>>>>>>>%d<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n",rod);
+						rodada =(rodada+rod)+1;
+						break;
+					}else{
+						rodada++;
+						break;
 					rodada =(rodada+rod)+1;
 					break;
 			}
